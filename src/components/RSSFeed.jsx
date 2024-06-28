@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const RSSFeed = ({ feedUrls }) => {
   const [posts, setPosts] = useState([]);
-  const parser = new Parser();
 
   useEffect(() => {
     const fetchRSSFeed = async () => {
