@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import Parser from 'rss-parser';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const RSSFeed = ({ feedUrl }) => {
+const RSSFeed = ({ feedUrls }) => {
   const [posts, setPosts] = useState([]);
   const parser = new Parser();
 
   useEffect(() => {
     const fetchRSSFeed = async () => {
       try {
-        const feed = await parser.parseURL(feedUrl);
-        setPosts(feed.items);
+        const allPosts = [];
+        for (const feedUrl of feedUrls) {
+          const feed = await parser.parseURL(feedUrl);
+          allPosts.push(...feed.items);
+        }
+        setPosts(allPosts);
       } catch (error) {
         console.error('Error fetching RSS feed:', error);
       }
@@ -20,7 +24,7 @@ const RSSFeed = ({ feedUrl }) => {
     const interval = setInterval(fetchRSSFeed, 60000); // Update every 60 seconds
 
     return () => clearInterval(interval);
-  }, [feedUrl]);
+  }, [feedUrls]);
 
   return (
     <div className="space-y-4">
