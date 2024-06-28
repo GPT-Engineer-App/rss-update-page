@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Parser from 'rss-parser';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const RSSFeed = ({ feedUrls }) => {
@@ -11,8 +11,9 @@ const RSSFeed = ({ feedUrls }) => {
       try {
         const allPosts = [];
         for (const feedUrl of feedUrls) {
-          const feed = await parser.parseURL(feedUrl);
-          allPosts.push(...feed.items);
+          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}`);
+          const data = await response.json();
+          allPosts.push(...data.items);
         }
         setPosts(allPosts);
       } catch (error) {
